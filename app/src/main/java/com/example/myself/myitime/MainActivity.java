@@ -23,8 +23,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.myself.myitime.data.model.Item;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity
 
         //Init data
         theItems = new ArrayList<Item>();
-        theItems.add(new Item("text","success","2019.11.4",R.drawable.background_for_testing));
+        theItems.add(new Item("title","remark","2019.11.4",R.drawable.background_for_testing));
 
         //set adapter for ListView
         listviewAdapter = new GoodsArrayAdapter(this,R.layout.activity_item,theItems);
