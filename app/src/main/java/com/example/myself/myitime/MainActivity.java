@@ -1,8 +1,13 @@
 package com.example.myself.myitime;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +17,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.example.myself.myitime.data.model.Item;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ArrayList<Item> theItems;
+    private GoodsArrayAdapter listviewAdapter=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +59,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Init data
+        theItems = new ArrayList<Item>();
+        theItems.add(new Item("text","success","2019.11.4",R.drawable.background_for_testing));
+
+        //set adapter for ListView
+        listviewAdapter = new GoodsArrayAdapter(this,R.layout.activity_item,theItems);
+        ListView listView = (ListView)findViewById(R.id.list_view_items);
+        listView.setAdapter(listviewAdapter);
     }
 
     @Override
@@ -85,4 +113,37 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    protected class GoodsArrayAdapter extends ArrayAdapter<Item>
+    {
+        private  int resourceId;
+        public GoodsArrayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Item> objects) {
+            super(context, resource, objects);
+            resourceId=resource;
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            LayoutInflater mInflater= LayoutInflater.from(this.getContext());
+            View item = mInflater.inflate(this.resourceId,null);
+
+            ImageView img = (ImageView)item.findViewById(R.id.image_view_background);
+            TextView title = (TextView)item.findViewById(R.id.text_view_title);
+            TextView date = (TextView)item.findViewById(R.id.text_view_date);
+            TextView remark= (TextView)item.findViewById(R.id.text_view_remark);
+
+            Item good_item= this.getItem(position);
+            img.setImageResource(good_item.getPictureId());
+            title.setText(good_item.getTitle());
+            remark.setText(good_item.getRemark());
+            date.setText(good_item.getDate());
+
+            return item;
+        }
+    }
+
 }
+
+
