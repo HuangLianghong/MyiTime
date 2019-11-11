@@ -8,11 +8,14 @@
     tools:context="com.example.myself.myitime.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+
     <ListView
         android:id="@+id/list_view_items"
-        android:layout_width="368dp"
-        android:layout_height="495dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:divider="#FFFFFF"
+        android:dividerHeight="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

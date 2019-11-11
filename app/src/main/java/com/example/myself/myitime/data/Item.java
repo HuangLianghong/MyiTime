@@ -1,4 +1,4 @@
-package com.example.myself.myitime;
+package com.example.myself.myitime.data;
 
 import java.io.Serializable;
 

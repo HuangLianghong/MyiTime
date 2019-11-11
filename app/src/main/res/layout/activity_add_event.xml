@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.myself.myitime.AddActivity">
+
+    <ImageView
+        android:id="@+id/image_view_add_title_background"
+        android:layout_width="0dp"
+        android:layout_height="230dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/colorPrimary"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+
+
+    <TextView
+        android:id="@+id/text_view_remark"
+        android:layout_width="58dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="141dp"
+        android:text="备注"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="60dp" />
+
+    <TextView
+        android:id="@+id/text_view_title"
+        android:layout_width="58dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="71dp"
+        android:text="标题"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="60dp" />
+
+    <EditText
+        android:id="@+id/edit_text_title"
+        android:layout_width="331dp"
+        android:layout_height="46dp"
+        android:layout_marginLeft="60dp"
+        android:ems="10"
+        android:hint="    生日，纪念日，节日，考试…"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/white"
+        android:theme="@style/MyEditText"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_title"
+        android:layout_marginStart="60dp" />
+
+
+    <EditText
+        android:id="@+id/edit_text_remark"
+        android:layout_width="331dp"
+        android:layout_height="46dp"
+        android:layout_marginLeft="60dp"
+        android:ems="10"
+        android:hint="    想说的话，目标，格言"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:theme="@style/MyEditText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_remark"
+        android:layout_marginStart="60dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        app:backgroundTint="?attr/colorControlHighlight"
+        app:fabSize="mini"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/arrow_back"
+        android:layout_marginStart="8dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        app:backgroundTint="?attr/colorControlHighlight"
+        app:fabSize="mini"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/done"
+        android:layout_marginEnd="8dp" />
+
+    <ListView
+        android:id="@+id/list_view_add_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_add_title_background"
+        android:divider="#FFFFFF"
+        android:dividerHeight="0dp"/>
+</android.support.constraint.ConstraintLayout>

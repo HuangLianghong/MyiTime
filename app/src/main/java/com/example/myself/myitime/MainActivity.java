@@ -1,6 +1,7 @@
 package com.example.myself.myitime;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -23,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.myself.myitime.data.Item;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +33,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ArrayList<Item> theItems;
-    private GoodsArrayAdapter listviewAdapter=null;
+    private EventsArrayAdapter listviewAdapter=null;
+
 
 
     @Override
@@ -46,6 +50,9 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                Intent intent = new Intent(MainActivity.this,AddActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -63,7 +70,7 @@ public class MainActivity extends AppCompatActivity
         theItems.add(new Item("title","remark","2019.11.4",R.drawable.background_for_testing));
 
         //set adapter for ListView
-        listviewAdapter = new GoodsArrayAdapter(this,R.layout.activity_item,theItems);
+        listviewAdapter = new EventsArrayAdapter(this,R.layout.event,theItems);
         ListView listView = (ListView)findViewById(R.id.list_view_items);
         listView.setAdapter(listviewAdapter);
     }
@@ -113,10 +120,10 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    protected class GoodsArrayAdapter extends ArrayAdapter<Item>
+    protected class EventsArrayAdapter extends ArrayAdapter<Item>
     {
         private  int resourceId;
-        public GoodsArrayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Item> objects) {
+        public EventsArrayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Item> objects) {
             super(context, resource, objects);
             resourceId=resource;
         }
@@ -141,6 +148,7 @@ public class MainActivity extends AppCompatActivity
             return item;
         }
     }
+
 
 }
 
