@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,10 +20,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myself.myitime.data.Item;
 
@@ -32,9 +35,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int REQUEST_CODE_ADD = 1;
     private ArrayList<Item> theItems;
-    private EventsArrayAdapter listviewAdapter=null;
-
+    private EventsArrayAdapter listviewAdapter = null;
 
 
     @Override
@@ -48,11 +51,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //悬浮按钮事件监听
 
-                Intent intent = new Intent(MainActivity.this,AddActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_ADD);
             }
         });
 
@@ -67,12 +69,14 @@ public class MainActivity extends AppCompatActivity
 
         //Init data
         theItems = new ArrayList<Item>();
-        theItems.add(new Item("title","remark","2019.11.4",R.drawable.background_for_testing));
+        theItems.add(new Item("title", "remark", "2019.11.4", R.drawable.background_for_testing));
+        theItems.add(new Item("title2", "remark2", "2019.11.12", R.drawable.background_for_testing));
 
         //set adapter for ListView
-        listviewAdapter = new EventsArrayAdapter(this,R.layout.event,theItems);
-        ListView listView = (ListView)findViewById(R.id.list_view_items);
+        listviewAdapter = new EventsArrayAdapter(this, R.layout.event, theItems);
+        ListView listView = (ListView) findViewById(R.id.list_view_items);
         listView.setAdapter(listviewAdapter);
+        this.registerForContextMenu(listView);
     }
 
     @Override
@@ -91,7 +95,6 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -120,26 +123,26 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    protected class EventsArrayAdapter extends ArrayAdapter<Item>
-    {
-        private  int resourceId;
+    protected class EventsArrayAdapter extends ArrayAdapter<Item> {
+        private int resourceId;
+
         public EventsArrayAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Item> objects) {
             super(context, resource, objects);
-            resourceId=resource;
+            resourceId = resource;
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater mInflater= LayoutInflater.from(this.getContext());
-            View item = mInflater.inflate(this.resourceId,null);
+            LayoutInflater mInflater = LayoutInflater.from(this.getContext());
+            View item = mInflater.inflate(this.resourceId, null);
 
-            ImageView img = (ImageView)item.findViewById(R.id.image_view_background);
-            TextView title = (TextView)item.findViewById(R.id.text_view_title);
-            TextView date = (TextView)item.findViewById(R.id.text_view_date);
-            TextView remark= (TextView)item.findViewById(R.id.text_view_remark);
+            ImageView img = (ImageView) item.findViewById(R.id.image_view_background);
+            TextView title = (TextView) item.findViewById(R.id.text_view_title);
+            TextView date = (TextView) item.findViewById(R.id.text_view_date);
+            TextView remark = (TextView) item.findViewById(R.id.text_view_remark);
 
-            Item good_item= this.getItem(position);
+            Item good_item = this.getItem(position);
             img.setImageResource(good_item.getPictureId());
             title.setText(good_item.getTitle());
             remark.setText(good_item.getRemark());
@@ -149,7 +152,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_ADD){
+           if(resultCode==RESULT_OK){
+               String title=data.getStringExtra("title");
+               String remark=data.getStringExtra("remark");
+               theItems.add(new Item(title, remark, "2019.11.4", R.drawable.background_for_testing));
+               listviewAdapter.notifyDataSetChanged();
+           }
+        }
+    }
+
+
 
 }
-
-

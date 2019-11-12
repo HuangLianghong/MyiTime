@@ -1,9 +1,11 @@
 package com.example.myself.myitime;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myself.myitime.data.AddSetting;
 
@@ -25,6 +28,8 @@ public class AddActivity extends AppCompatActivity {
 
     private AddSettingArrayAdapter1 Adapter1=null;
     private ArrayList<AddSetting> ArrayAddSetting;
+
+    private FloatingActionButton fab_canccel,fab_done;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,36 @@ public class AddActivity extends AppCompatActivity {
         listview1.setAdapter(Adapter1);
 
 
+
+
+
+        fab_canccel= (FloatingActionButton) findViewById(R.id.fab_back);
+        fab_done= (FloatingActionButton) findViewById(R.id.fab_done);
+
+        fab_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra("title",editTextTitle.getText().toString().trim());
+                intent.putExtra("remark",editTextRemark.getText().toString().trim());
+
+                if(editTextTitle.getText().length() != 0){
+                    setResult(RESULT_OK, intent);
+                    AddActivity.this.finish();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "标题不能为空", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        fab_canccel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddActivity.this.finish();
+            }
+        });
 
 
     }
