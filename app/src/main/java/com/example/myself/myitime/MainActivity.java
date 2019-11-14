@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.myself.myitime.data.ImageFilter;
 import com.example.myself.myitime.data.Item;
 
 import java.util.ArrayList;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity
             Item good_item = this.getItem(position);
             byte[] picMatrix = good_item.getPic();
             Bitmap bitmap = Bytes2Bimap(picMatrix);
+            bitmap = ImageFilter.blurBitmap(getApplicationContext() , bitmap, 2);
 
             img.setImageBitmap(bitmap);
             title.setText(good_item.getTitle());
@@ -158,6 +160,8 @@ public class MainActivity extends AppCompatActivity
             return null;
              }
         }
+
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -176,16 +180,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public static Bitmap getPicFromBytes(byte[] bytes, BitmapFactory.Options opts) {
-
-        if (bytes != null)
-            if (opts != null)
-                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length,  opts);
-            else
-                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        return null;
-
-    }
 
 
 }

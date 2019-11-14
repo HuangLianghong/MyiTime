@@ -130,6 +130,7 @@ public class AddActivity extends AppCompatActivity {
                 Uri originalUri = data.getData();
                 bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);
                 ByteArrayOutputStream output = new ByteArrayOutputStream();//初始化一个流对象
+                bm = Bitmap.createScaledBitmap(bm, 85, 85, true);//将图片尺寸变小
                 bm.compress(Bitmap.CompressFormat.PNG, 100, output);//把bitmap100%高质量压缩 到 output对象里
                 pic = output.toByteArray();//转换成功了  pic就是一个bit的资源数组
                 if(pic.length!= 0)
