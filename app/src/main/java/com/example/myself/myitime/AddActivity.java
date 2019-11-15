@@ -1,5 +1,6 @@
 package com.example.myself.myitime;
 
+import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +13,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AddActivity extends AppCompatActivity {
@@ -42,6 +46,7 @@ public class AddActivity extends AppCompatActivity {
 
     private FloatingActionButton fab_canccel,fab_done;
     public byte[] pic;
+    public String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,11 @@ public class AddActivity extends AppCompatActivity {
         editTextTitle = (EditText)findViewById(R.id.edit_text_title);
         editTextRemark= (EditText)findViewById(R.id.edit_text_remark);
         imageView = (ImageView)findViewById(R.id.image_view_background);
+        Calendar curDate = Calendar.getInstance();
+        int year = curDate.get(Calendar.YEAR);
+        int month = curDate.get(Calendar.MONTH)+1;
+        int day = curDate.get(Calendar.DAY_OF_MONTH);
+        date = String.valueOf(year+"年"+month+"月"+day+"日");
 
         ArrayAddSetting = new ArrayList<AddSetting>();
 
@@ -68,7 +78,8 @@ public class AddActivity extends AppCompatActivity {
                 AddSetting As = ArrayAddSetting.get(position);
                 switch (position){
                     case 0:
-                       //选择日期
+                        setDate(position);
+
                         break;
                     case 1:
                         //选择周期
@@ -98,13 +109,17 @@ public class AddActivity extends AppCompatActivity {
                 intent.putExtra("title",editTextTitle.getText().toString().trim());
                 intent.putExtra("remark",editTextRemark.getText().toString().trim());
                 intent.putExtra("picture",pic);
-                if(editTextTitle.getText().length() != 0){
+                intent.putExtra("date",date);
+                if(editTextTitle.getText().length() == 0){
+                    Toast.makeText(getApplicationContext(), "标题不能为空", Toast.LENGTH_SHORT).show();
+                }
+                else if(null== pic || pic.length==0){
+                    Toast.makeText(getApplicationContext(), "请选择图片", Toast.LENGTH_SHORT).show();
+                }
+                else{
                     Toast.makeText(getApplicationContext(), "点击了OK", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK, intent);
                     AddActivity.this.finish();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "标题不能为空", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -118,6 +133,31 @@ public class AddActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void setDate(int position) {
+        //选择日期
+        final Calendar calendar = Calendar.getInstance();
+        //当前位置的item
+        final AddSetting addSetting= ArrayAddSetting.get(position);
+        DatePickerDialog dialog = new DatePickerDialog(AddActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        int m = calendar.get(Calendar.MONTH)+1;
+                        date= String.valueOf(calendar.get(Calendar.YEAR)+"年"+m+"月"+calendar.get(Calendar.DAY_OF_MONTH)+"日");
+                        addSetting.setRemark(date);
+                        Adapter1.notifyDataSetChanged();
+                    }
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        dialog.show();
     }
 
     protected  void onActivityResult(int requestCode, int resultCode, Intent data) {

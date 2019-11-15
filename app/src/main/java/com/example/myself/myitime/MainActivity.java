@@ -171,8 +171,9 @@ public class MainActivity extends AppCompatActivity
 
                String title=data.getStringExtra("title");
                String remark=data.getStringExtra("remark");
+               String date = data.getStringExtra("date");
                byte[] res = data.getByteArrayExtra("picture");
-               Item item =new Item(title, remark, "2019.11.4", res);
+               Item item =new Item(title, remark, date, res);
 
                theItems.add(item);
                listviewAdapter.notifyDataSetChanged();
