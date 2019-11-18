@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.myself.myitime.data.FileDataSource;
 import com.example.myself.myitime.data.ImageFilter;
 import com.example.myself.myitime.data.Item;
 
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final int REQUEST_CODE_ADD = 1;
     private ArrayList<Item> theItems;
+    private FileDataSource fileDataSource;
     private EventsArrayAdapter listviewAdapter = null;
     Bitmap mImageIds ;  //转换后的bitmap
 
@@ -67,8 +69,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Init data
-        theItems = new ArrayList<Item>();
+       InitData();
 
         //set adapter for ListView
         listviewAdapter = new EventsArrayAdapter(this, R.layout.event, theItems);
@@ -77,6 +78,15 @@ public class MainActivity extends AppCompatActivity
         this.registerForContextMenu(listView);
     }
 
+    private void InitData() {
+        fileDataSource=new FileDataSource(this);
+        theItems=fileDataSource.load();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fileDataSource.save();
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
