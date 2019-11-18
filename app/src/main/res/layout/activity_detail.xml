@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailActivity">
+
+    <Switch
+        android:id="@+id/switch_calendar"
+        android:layout_width="97dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_calendar" />
+
+    <Switch
+        android:id="@+id/switch_shortcut"
+        android:layout_width="97dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_shortcut" />
+
+    <ImageView
+        android:id="@+id/image_view_detail"
+        android:layout_width="414dp"
+        android:layout_height="280dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mawallpaper" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_detail_back"
+        android:layout_width="59dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        app:backgroundTint="?attr/colorControlHighlight"
+        app:layout_constraintStart_toStartOf="@+id/image_view_detail"
+        app:layout_constraintTop_toTopOf="@+id/image_view_detail"
+        app:srcCompat="@drawable/arrow_back" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_detail_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:clickable="true"
+        app:backgroundTint="?attr/colorControlHighlight"
+        app:layout_constraintEnd_toStartOf="@+id/fab_detail_share"
+        app:layout_constraintTop_toTopOf="@+id/image_view_detail"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_detail_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:clickable="true"
+        app:backgroundTint="?attr/colorControlHighlight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/image_view_detail"
+        app:srcCompat="@drawable/edit"
+        tools:ignore="VectorDrawableCompat" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_detail_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:clickable="true"
+        app:backgroundTint="?attr/colorControlHighlight"
+        app:layout_constraintEnd_toStartOf="@+id/fab_detail_edit"
+        app:layout_constraintTop_toTopOf="@+id/image_view_detail"
+        app:srcCompat="@android:drawable/ic_menu_share" />
+
+    <ListView
+        android:id="@+id/list_view_details"
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_detail" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_view_details"
+        app:srcCompat="@drawable/notification" />
+
+    <TextView
+        android:id="@+id/text_view_notification"
+        android:layout_width="179dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:text="通知栏"
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <Switch
+        android:id="@+id/switch_notification"
+        android:layout_width="97dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_view_notification" />
+
+    <ImageView
+        android:id="@+id/image_view_calendar"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:srcCompat="@drawable/calendar" />
+
+    <ImageView
+        android:id="@+id/image_view_shortcut"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_calendar"
+        app:srcCompat="@drawable/menu" />
+
+    <TextView
+        android:id="@+id/text_view_calendar"
+        android:layout_width="179dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:text="在日历中显示"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="@+id/text_view_notification"
+        app:layout_constraintTop_toTopOf="@+id/image_view_calendar" />
+
+    <TextView
+        android:id="@+id/text_view_shortcut"
+        android:layout_width="179dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:text="快捷图标"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="@+id/text_view_notification"
+        app:layout_constraintTop_toTopOf="@+id/image_view_shortcut" />
+</android.support.constraint.ConstraintLayout>

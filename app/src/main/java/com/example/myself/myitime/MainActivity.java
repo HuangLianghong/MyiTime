@@ -1,6 +1,7 @@
 package com.example.myself.myitime;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,25 +21,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myself.myitime.data.FileDataSource;
 import com.example.myself.myitime.data.ImageFilter;
 import com.example.myself.myitime.data.Item;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int REQUEST_CODE_ADD = 1;
+    private static final int REQUEST_CODE_DETAIL=2;
+    private static final int RESULT_DELETE=901;
     private ArrayList<Item> theItems;
     private FileDataSource fileDataSource;
     private EventsArrayAdapter listviewAdapter = null;
+
+    Item it;
     Bitmap mImageIds ;  //转换后的bitmap
 
 
@@ -73,9 +81,30 @@ public class MainActivity extends AppCompatActivity
 
         //set adapter for ListView
         listviewAdapter = new EventsArrayAdapter(this, R.layout.event, theItems);
-        ListView listView = (ListView) findViewById(R.id.list_view_items);
+        final ListView listView = (ListView) findViewById(R.id.list_view_items);
         listView.setAdapter(listviewAdapter);
-        this.registerForContextMenu(listView);
+
+        //listview中item的点击事件
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),
+                        "你选择了第"+position+"个Item",
+                        Toast.LENGTH_SHORT).show();
+
+                it =theItems.get(position);
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("title",it.getTitle());
+                intent.putExtra("date",it.getDate());
+                intent.putExtra("remark",it.getRemark());
+                intent.putExtra("pic",it.getPic());
+                intent.putExtra("position",position);
+                startActivityForResult(intent, REQUEST_CODE_DETAIL);
+            }
+
+        });
+
+
     }
 
     private void InitData() {
@@ -188,6 +217,16 @@ public class MainActivity extends AppCompatActivity
                theItems.add(item);
                listviewAdapter.notifyDataSetChanged();
            }
+        }
+        else if(requestCode == REQUEST_CODE_DETAIL){
+            if(resultCode==RESULT_CANCELED){}
+            else if(resultCode == RESULT_DELETE){
+                int pos = data.getIntExtra("position",0);
+                final int itemPosition=pos;
+                theItems.remove(itemPosition);
+                listviewAdapter.notifyDataSetChanged();
+                Toast.makeText(MainActivity.this, "删除成功！", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
