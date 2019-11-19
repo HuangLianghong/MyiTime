@@ -53,18 +53,37 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+
         editTextTitle = (EditText)findViewById(R.id.edit_text_title);
         editTextRemark= (EditText)findViewById(R.id.edit_text_remark);
         imageView = (ImageView)findViewById(R.id.image_view_background);
+
+        String title_in=getIntent().getStringExtra("title");
+        String remark_in=getIntent().getStringExtra("remark");
+        String date_in = getIntent().getStringExtra("date");
+
+        String type=getIntent().getStringExtra("type");
+
         Calendar curDate = Calendar.getInstance();
         int year = curDate.get(Calendar.YEAR);
         int month = curDate.get(Calendar.MONTH)+1;
         int day = curDate.get(Calendar.DAY_OF_MONTH);
-        date = String.valueOf(year+"年"+month+"月"+day+"日");
 
         ArrayAddSetting = new ArrayList<AddSetting>();
+        if(type.equals("add") ) {
+            date = String.valueOf(year + "年" + month + "月" + day + "日");
+            ArrayAddSetting.add(new AddSetting(R.drawable.date,"日期","长按使用计算器"));
+        }
+        else{
+            date= date_in;
+            editTextTitle.setText(title_in);
+            editTextRemark.setText(remark_in);
+            ArrayAddSetting.add(new AddSetting(R.drawable.date,"日期",date));
+            pic = getIntent().getByteArrayExtra("picture");
+        }
 
-        ArrayAddSetting.add(new AddSetting(R.drawable.date,"日期","长按使用计算器"));
+
+
         ArrayAddSetting.add(new AddSetting(R.drawable.repeat,"重复设置","无"));
         ArrayAddSetting.add(new AddSetting(R.drawable.pic_icon,"图片",""));
         ArrayAddSetting.add(new AddSetting(R.drawable.note,"添加标签",""));
@@ -128,6 +147,7 @@ public class AddActivity extends AppCompatActivity {
         fab_canccel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setResult(RESULT_CANCELED);
                 AddActivity.this.finish();
             }
         });

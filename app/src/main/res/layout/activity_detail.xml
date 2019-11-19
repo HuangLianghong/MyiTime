@@ -24,12 +24,12 @@
 
     <ImageView
         android:id="@+id/image_view_detail"
-        android:layout_width="414dp"
+        android:layout_width="415dp"
         android:layout_height="280dp"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/mawallpaper" />
+         />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_detail_back"

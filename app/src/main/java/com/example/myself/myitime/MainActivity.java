@@ -42,11 +42,13 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_CODE_ADD = 1;
     private static final int REQUEST_CODE_DETAIL=2;
     private static final int RESULT_DELETE=901;
+
     private ArrayList<Item> theItems;
     private FileDataSource fileDataSource;
     private EventsArrayAdapter listviewAdapter = null;
 
     Item it;
+    int changed_position=0;
     Bitmap mImageIds ;  //转换后的bitmap
 
 
@@ -64,6 +66,12 @@ public class MainActivity extends AppCompatActivity
                 //悬浮按钮事件监听
 
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                intent.putExtra("title","");
+                intent.putExtra("date","");
+                intent.putExtra("remark","");
+                intent.putExtra("pic","");
+                intent.putExtra("type","add");
+
                 startActivityForResult(intent, REQUEST_CODE_ADD);
             }
         });
@@ -92,13 +100,13 @@ public class MainActivity extends AppCompatActivity
                         "你选择了第"+position+"个Item",
                         Toast.LENGTH_SHORT).show();
 
+                changed_position=position;
                 it =theItems.get(position);
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
                 intent.putExtra("title",it.getTitle());
                 intent.putExtra("date",it.getDate());
                 intent.putExtra("remark",it.getRemark());
                 intent.putExtra("pic",it.getPic());
-                intent.putExtra("position",position);
                 startActivityForResult(intent, REQUEST_CODE_DETAIL);
             }
 
@@ -215,11 +223,31 @@ public class MainActivity extends AppCompatActivity
                Item item =new Item(title, remark, date, res);
 
                theItems.add(item);
+
                listviewAdapter.notifyDataSetChanged();
            }
         }
         else if(requestCode == REQUEST_CODE_DETAIL){
-            if(resultCode==RESULT_CANCELED){}
+            if(resultCode==RESULT_CANCELED){
+                String state = data.getStringExtra("state");
+
+                if(state.equals("Changed")) {
+                    String title = data.getStringExtra("title");
+                    String remark = data.getStringExtra("remark");
+                    String date = data.getStringExtra("date");
+                    byte[] res = data.getByteArrayExtra("picture");
+
+                    it=theItems.get(changed_position);
+                    it.setDate(date);
+                    it.setPic(res);
+                    it.setTitle(title);
+                    it.setRemark(remark);
+                    listviewAdapter.notifyDataSetChanged();
+                }
+                else{
+
+                }
+            }
             else if(resultCode == RESULT_DELETE){
                 int pos = data.getIntExtra("position",0);
                 final int itemPosition=pos;
@@ -227,6 +255,8 @@ public class MainActivity extends AppCompatActivity
                 listviewAdapter.notifyDataSetChanged();
                 Toast.makeText(MainActivity.this, "删除成功！", Toast.LENGTH_SHORT).show();
             }
+            else{}
+
         }
     }
 
