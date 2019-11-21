@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("title",it.getTitle());
                 intent.putExtra("date",it.getDate());
                 intent.putExtra("remark",it.getRemark());
-                intent.putExtra("pic",it.getPic());
+                intent.putExtra("picture",it.getPic());
                 startActivityForResult(intent, REQUEST_CODE_DETAIL);
             }
 
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity
             Item good_item = this.getItem(position);
             byte[] picMatrix = good_item.getPic();
             Bitmap bitmap = Bytes2Bimap(picMatrix);
-            bitmap = ImageFilter.blurBitmap(getApplicationContext() , bitmap, 2);
+            bitmap = ImageFilter.blurBitmap(getApplicationContext() , bitmap, 10);
 
             img.setImageBitmap(bitmap);
             title.setText(good_item.getTitle());

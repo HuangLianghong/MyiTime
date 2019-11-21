@@ -2,21 +2,35 @@ package com.example.myself.myitime;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 public class DetailActivity extends AppCompatActivity {
 
     private static final int RESULT_DELETE=901;
     private static final int REQUEST_CODE_EDIT=100;
     Intent intent_DetailToMain;
+
+    byte[] picture;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        final String title=getIntent().getStringExtra("title");
+        final String remark=getIntent().getStringExtra("remark");
+        final String date=getIntent().getStringExtra("date");
+        byte[] pic=getIntent().getByteArrayExtra("picture");
+        picture=pic;
+
+        Bitmap bitmap = Bytes2Bimap(pic);
+        ImageView imageView = (ImageView)findViewById(R.id.image_view_detail);
+        imageView.setImageBitmap(bitmap);
         FloatingActionButton fab_delete = (FloatingActionButton) findViewById(R.id.fab_detail_delete);
         fab_delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,17 +76,13 @@ public class DetailActivity extends AppCompatActivity {
         fab_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title=getIntent().getStringExtra("title");
-                String remark=getIntent().getStringExtra("remark");
-                String date=getIntent().getStringExtra("date");
-                byte[] pic=getIntent().getByteArrayExtra("picture");
 
                 Intent intent = new Intent(DetailActivity.this, AddActivity.class);
                 intent.putExtra("title",title);
                 intent.putExtra("date",date);
                 intent.putExtra("remark",remark);
                 intent.putExtra("type","edit");
-                intent.putExtra("picture",pic);
+                intent.putExtra("picture",picture);
 
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
 
@@ -104,4 +114,12 @@ public class DetailActivity extends AppCompatActivity {
         }
 
     }
+    public Bitmap Bytes2Bimap(byte[] b) {
+        if (b.length != 0) {
+            return BitmapFactory.decodeByteArray(b, 0, b.length);
+        } else {
+            return null;
+        }
+    }
+
 }
