@@ -33,6 +33,7 @@ import com.example.myself.myitime.data.ImageFilter;
 import com.example.myself.myitime.data.Item;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -67,10 +68,14 @@ public class MainActivity extends AppCompatActivity
 
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
                 intent.putExtra("title","");
-                intent.putExtra("date","");
                 intent.putExtra("remark","");
                 intent.putExtra("pic","");
                 intent.putExtra("type","add");
+                intent.putExtra("years",0);
+                intent.putExtra("months",0);
+                intent.putExtra("days",0);
+                intent.putExtra("hours",0);
+                intent.putExtra("minutes",0);
 
                 startActivityForResult(intent, REQUEST_CODE_ADD);
             }
@@ -104,9 +109,14 @@ public class MainActivity extends AppCompatActivity
                 it =theItems.get(position);
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
                 intent.putExtra("title",it.getTitle());
-                intent.putExtra("date",it.getDate());
                 intent.putExtra("remark",it.getRemark());
                 intent.putExtra("picture",it.getPic());
+                intent.putExtra("years",it.getYears());
+                intent.putExtra("months",it.getMonths());
+                intent.putExtra("days",it.getDays());
+                intent.putExtra("hours",it.getHours());
+                intent.putExtra("minutes",it.getMinutes());
+
                 startActivityForResult(intent, REQUEST_CODE_DETAIL);
             }
 
@@ -191,11 +201,12 @@ public class MainActivity extends AppCompatActivity
             byte[] picMatrix = good_item.getPic();
             Bitmap bitmap = Bytes2Bimap(picMatrix);
             bitmap = ImageFilter.blurBitmap(getApplicationContext() , bitmap, 10);
+            String date_text= String.valueOf(good_item.getYears()+"年"+(good_item.getMonths()+1)+"月"+good_item.getDays()+"日");
 
             img.setImageBitmap(bitmap);
             title.setText(good_item.getTitle());
             remark.setText(good_item.getRemark());
-            date.setText(good_item.getDate());
+            date.setText(date_text);
 
             return item;
         }
@@ -218,9 +229,13 @@ public class MainActivity extends AppCompatActivity
 
                String title=data.getStringExtra("title");
                String remark=data.getStringExtra("remark");
-               String date = data.getStringExtra("date");
                byte[] res = data.getByteArrayExtra("picture");
-               Item item =new Item(title, remark, date, res);
+               int year = data.getIntExtra("years",0);
+               int month= data.getIntExtra("months",0);
+               int day = data.getIntExtra("days",0);
+               int hour = data.getIntExtra("hours",0);
+               int minute = data.getIntExtra("minutes",0);
+               Item item =new Item(title, remark, res,year,month,day,hour,minute);
 
                theItems.add(item);
 
@@ -234,14 +249,24 @@ public class MainActivity extends AppCompatActivity
                 if(state.equals("Changed")) {
                     String title = data.getStringExtra("title");
                     String remark = data.getStringExtra("remark");
-                    String date = data.getStringExtra("date");
                     byte[] res = data.getByteArrayExtra("picture");
+                    int year = data.getIntExtra("years",0);
+                    int month= data.getIntExtra("months",0);
+                    int day = data.getIntExtra("days",0);
+                    int hour = data.getIntExtra("hours",0);
+                    int minute = data.getIntExtra("minutes",0);
 
+                    String date= String.valueOf(year+"年"+month+"月"+day+"日");
                     it=theItems.get(changed_position);
                     it.setDate(date);
                     it.setPic(res);
                     it.setTitle(title);
                     it.setRemark(remark);
+                    it.setYears(year);
+                    it.setMonths(month);
+                    it.setDays(day);
+                    it.setHours(hour);
+                    it.setMinutes(minute);
                     listviewAdapter.notifyDataSetChanged();
                 }
                 else{

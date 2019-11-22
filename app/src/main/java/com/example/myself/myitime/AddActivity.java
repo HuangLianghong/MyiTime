@@ -1,6 +1,7 @@
 package com.example.myself.myitime;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.myself.myitime.data.AddSetting;
@@ -47,6 +49,7 @@ public class AddActivity extends AppCompatActivity {
     private FloatingActionButton fab_canccel,fab_done;
     public byte[] pic;
     public String date;
+    private int years,months,days,hours,minutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,11 @@ public class AddActivity extends AppCompatActivity {
         String title_in=getIntent().getStringExtra("title");
         String remark_in=getIntent().getStringExtra("remark");
         String date_in = getIntent().getStringExtra("date");
+        years = getIntent().getIntExtra("years",0);
+        months = getIntent().getIntExtra("months",0);
+        days = getIntent().getIntExtra("days",0);
+        hours = getIntent().getIntExtra("hours",0);
+        minutes = getIntent().getIntExtra("minutes",0);
 
         String type=getIntent().getStringExtra("type");
 
@@ -75,7 +83,7 @@ public class AddActivity extends AppCompatActivity {
             ArrayAddSetting.add(new AddSetting(R.drawable.date,"日期","长按使用计算器"));
         }
         else{
-            date= date_in;
+            date = String.valueOf(years + "年" + (months+1) + "月" + days + "日");
             editTextTitle.setText(title_in);
             editTextRemark.setText(remark_in);
             ArrayAddSetting.add(new AddSetting(R.drawable.date,"日期",date));
@@ -97,8 +105,8 @@ public class AddActivity extends AppCompatActivity {
                 AddSetting As = ArrayAddSetting.get(position);
                 switch (position){
                     case 0:
+                        setTime(position);
                         setDate(position);
-
                         break;
                     case 1:
                         //选择周期
@@ -128,7 +136,11 @@ public class AddActivity extends AppCompatActivity {
                 intent.putExtra("title",editTextTitle.getText().toString().trim());
                 intent.putExtra("remark",editTextRemark.getText().toString().trim());
                 intent.putExtra("picture",pic);
-                intent.putExtra("date",date);
+                intent.putExtra("years",years);
+                intent.putExtra("months",months);
+                intent.putExtra("days",days);
+                intent.putExtra("hours",hours);
+                intent.putExtra("minutes",minutes);
                 if(editTextTitle.getText().length() == 0){
                     Toast.makeText(getApplicationContext(), "标题不能为空", Toast.LENGTH_SHORT).show();
                 }
@@ -168,8 +180,11 @@ public class AddActivity extends AppCompatActivity {
                         calendar.set(Calendar.MONTH, month);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                        int m = calendar.get(Calendar.MONTH)+1;
-                        date= String.valueOf(calendar.get(Calendar.YEAR)+"年"+m+"月"+calendar.get(Calendar.DAY_OF_MONTH)+"日");
+
+                        years=calendar.get(Calendar.YEAR);
+                        months=calendar.get(Calendar.MONTH);
+                        days=calendar.get(Calendar.DAY_OF_MONTH);
+                        date = String.valueOf(years + "年" + (months+1) + "月" + days + "日");
                         addSetting.setRemark(date);
                         Adapter1.notifyDataSetChanged();
                     }
@@ -178,6 +193,20 @@ public class AddActivity extends AppCompatActivity {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
+    }
+    public void setTime(int position) {
+        final AddSetting addSetting= ArrayAddSetting.get(position);
+        new TimePickerDialog(this,new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                hours = hourOfDay;
+                minutes = minute;
+                date= String.valueOf(years+"年"+(months+1)+"月"+days+"日"+hours+"小时"+minutes+"分钟");
+                addSetting.setRemark(date);
+            }
+        }, 0, 0, true).show();
+
     }
 
     protected  void onActivityResult(int requestCode, int resultCode, Intent data) {

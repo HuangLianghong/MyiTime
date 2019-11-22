@@ -79,21 +79,14 @@
         app:layout_constraintTop_toTopOf="@+id/image_view_detail"
         app:srcCompat="@android:drawable/ic_menu_share" />
 
-    <ListView
-        android:id="@+id/list_view_details"
-        android:layout_width="wrap_content"
-        android:layout_height="170dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_detail" />
-
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_view_details"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4"
         app:srcCompat="@drawable/notification" />
 
     <TextView
@@ -155,4 +148,54 @@
         android:textSize="18dp"
         app:layout_constraintStart_toStartOf="@+id/text_view_notification"
         app:layout_constraintTop_toTopOf="@+id/image_view_shortcut" />
+
+    <ImageView
+        android:id="@+id/image_view_detail_title"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_detail"
+        app:srcCompat="@drawable/date" />
+
+    <TextView
+        android:id="@+id/text_view_detail_title"
+        android:layout_width="179dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:text="TextView"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@+id/image_view_detail_title"
+        app:layout_constraintTop_toTopOf="@+id/image_view_detail_title" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@+id/image_view_detail_title"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_detail_title"
+        app:srcCompat="@drawable/time" />
+
+    <TextView
+        android:id="@+id/text_view_detail_leftTime"
+        android:layout_width="179dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <TextView
+        android:id="@+id/text_view_detail_targetTime"
+        android:layout_width="179dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="2dp"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/text_view_detail_leftTime"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_detail_leftTime" />
 </android.support.constraint.ConstraintLayout>

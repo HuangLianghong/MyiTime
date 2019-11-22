@@ -11,12 +11,61 @@ public class Item implements Serializable {
     private String remark;
     private String date;
     private byte[] pic;
+    private int years;
+    private int months;
+    private int days;
+    private int hours;
+    private int minutes;
 
-    public Item(String title, String remark, String date, byte[] pic) {
+    public int getHours() {
+        return hours;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    public int getYears() {
+        return years;
+    }
+
+    public void setYears(int years) {
+        this.years = years;
+    }
+
+    public int getMonths() {
+        return months;
+    }
+
+    public void setMonths(int months) {
+        this.months = months;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
+    }
+
+    public Item(String title, String remark, byte[] pic, int years, int months, int days,int hours,int minutes) {
         this.title = title;
         this.remark = remark;
-        this.date = date;
         this.pic = pic;
+        this.years = years;
+        this.months = months;
+        this.days = days;
+        this.hours = hours;
+        this.minutes=minutes;
     }
 
     public String getTitle() {
