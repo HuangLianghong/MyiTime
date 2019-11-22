@@ -181,7 +181,7 @@
 
     <TextView
         android:id="@+id/text_view_detail_leftTime"
-        android:layout_width="179dp"
+        android:layout_width="340dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:gravity="center_vertical"

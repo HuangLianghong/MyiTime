@@ -4,12 +4,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.Calendar;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -18,19 +21,21 @@ public class DetailActivity extends AppCompatActivity {
     Intent intent_DetailToMain=intent_DetailToMain = new Intent();;
 
     byte[] picture;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        final String title=getIntent().getStringExtra("title");
-        final String remark=getIntent().getStringExtra("remark");
-        byte[] pic=getIntent().getByteArrayExtra("picture");
         final int years = getIntent().getIntExtra("years",0);
         final int months = getIntent().getIntExtra("months",0);
         final int days = getIntent().getIntExtra("days",0);
         final int hours = getIntent().getIntExtra("hours",0);
         final int minutes = getIntent().getIntExtra("minutes",0);
+        final String title=getIntent().getStringExtra("title");
+        final String remark=getIntent().getStringExtra("remark");
+        byte[] pic=getIntent().getByteArrayExtra("picture");
+
         picture=pic;
 
         String date= String.valueOf(years+"年"+(months+1)+"月"+days+"日"+hours+"时"+minutes+"分");
@@ -42,6 +47,8 @@ public class DetailActivity extends AppCompatActivity {
         textView_title.setText(title);
         TextView textView_targetTime = (TextView)findViewById(R.id.text_view_detail_targetTime);
         textView_targetTime.setText(date);
+
+        showTimes();
 
         FloatingActionButton fab_delete = (FloatingActionButton) findViewById(R.id.fab_detail_delete);
         fab_delete.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +114,83 @@ public class DetailActivity extends AppCompatActivity {
         });
 
     }
+
+    public void showTimes() {
+
+        int runTime = 10*365*24*60*60;
+        CountDownTimer showTime = new CountDownTimer(runTime * 1000, 1000) {
+            @Override
+            public void onTick(long l) {
+                //倒计时时，在没有完成倒计时时会多次调用，直到结束倒计时
+
+                //获取当前的时间
+                Calendar curDate = Calendar.getInstance();
+                int year = curDate.get(Calendar.YEAR);
+                int month = curDate.get(Calendar.MONTH)+1;
+                int day = curDate.get(Calendar.DAY_OF_MONTH);
+                int hour = curDate.get(Calendar.HOUR_OF_DAY);
+                int minute = curDate.get(Calendar.MINUTE);
+                int second = curDate.get(Calendar.SECOND);
+
+                int years = getIntent().getIntExtra("years",0);
+                int months = getIntent().getIntExtra("months",0);
+                int days = getIntent().getIntExtra("days",0);
+                int hours = getIntent().getIntExtra("hours",0);
+                int minutes = getIntent().getIntExtra("minutes",0);
+
+                int seconds=60;
+
+                TextView textView_leftTime = (TextView)findViewById(R.id.text_view_detail_leftTime);
+
+                int year_left = years-year;
+                int month_left = months-month+1;
+                int day_left = days-day;
+                int hour_left=hours-hour;
+                int minute_left = minutes-minute;
+                int second_left = seconds-second;
+
+                if(month_left < 0&&year_left>0){
+                    year_left--;
+                    month_left+=11;
+                }
+                if(day_left < 0&&month_left>0){
+                    month_left--;
+                    day_left+=29;
+
+                }
+                if(hour_left < 0&&day_left>0){
+                    day_left--;
+                    hour_left+=23;
+
+                }
+                if(minute_left < 0&&hour_left>0){
+                    hour_left--;
+                    minute_left+=59;
+
+                }
+                if(second_left < 0&&minute_left>0){
+                    minute_left--;
+                    second_left+=59;
+                }
+
+
+
+
+
+
+                String time= String.valueOf("剩余"+year_left+"年"+month_left+"月"+day_left+"日"+hour_left+"时"+minute_left+"分"+second_left+"秒");
+
+                textView_leftTime.setText(time);
+            }
+
+            @Override
+            public void onFinish() {
+                //倒计时完成时调用
+            }
+        };
+        showTime.start();
+    }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

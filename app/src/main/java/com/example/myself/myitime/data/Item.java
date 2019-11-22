@@ -10,6 +10,7 @@ public class Item implements Serializable {
     private String title;
     private String remark;
     private String date;
+    private String leftTime;
     private byte[] pic;
     private int years;
     private int months;
@@ -19,6 +20,14 @@ public class Item implements Serializable {
 
     public int getHours() {
         return hours;
+    }
+
+    public String getLeftTime() {
+        return leftTime;
+    }
+
+    public void setLeftTime(String leftTime) {
+        this.leftTime = leftTime;
     }
 
     public void setHours(int hours) {
