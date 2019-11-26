@@ -22,5 +22,14 @@
         <item name="colorControlActivated">@color/pink</item>
     </style>
 
+    <style name="MyPickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">@color/themeColor</item>
+        <item name="android:colorPrimary">@color/themeColor</item>
+        <item name="android:colorPrimaryDark">@color/themeColor</item>
+
+    </style>
+
+
+
 
 </resources>

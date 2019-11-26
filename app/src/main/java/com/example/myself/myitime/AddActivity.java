@@ -1,9 +1,11 @@
 package com.example.myself.myitime;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +52,7 @@ public class AddActivity extends AppCompatActivity {
     private FloatingActionButton fab_canccel,fab_done;
     public byte[] pic;
     public String date;
-    private int years,months,days,hours,minutes;
+    private int years,months,days,hours,minutes,period;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class AddActivity extends AppCompatActivity {
         days = getIntent().getIntExtra("days",0);
         hours = getIntent().getIntExtra("hours",0);
         minutes = getIntent().getIntExtra("minutes",0);
+        period = getIntent().getIntExtra("period",0);
 
         String type=getIntent().getStringExtra("type");
 
@@ -81,18 +85,33 @@ public class AddActivity extends AppCompatActivity {
         if(type.equals("add") ) {
             date = String.valueOf(year + "年" + month + "月" + day + "日");
             ArrayAddSetting.add(new AddSetting(R.drawable.date,"日期","长按使用计算器"));
+            ArrayAddSetting.add(new AddSetting(R.drawable.repeat,"重复设置","无"));
         }
         else{
+            String P = null;
+            if(period == 0){
+                P = "无";
+            }
+            else if (period == 7){
+                P = "每周";
+            }
+            else if (period == 30){
+                P = "每月";
+            }
+            else {
+                P = "每年";
+            }
             date = String.valueOf(years + "年" + (months+1) + "月" + days + "日");
             editTextTitle.setText(title_in);
             editTextRemark.setText(remark_in);
             ArrayAddSetting.add(new AddSetting(R.drawable.date,"日期",date));
+            ArrayAddSetting.add(new AddSetting(R.drawable.repeat,"重复设置",P));
             pic = getIntent().getByteArrayExtra("picture");
         }
 
 
 
-        ArrayAddSetting.add(new AddSetting(R.drawable.repeat,"重复设置","无"));
+
         ArrayAddSetting.add(new AddSetting(R.drawable.pic_icon,"图片",""));
         ArrayAddSetting.add(new AddSetting(R.drawable.note,"添加标签",""));
 
@@ -110,6 +129,7 @@ public class AddActivity extends AppCompatActivity {
                         break;
                     case 1:
                         //选择周期
+                        PeriodDialog();
                         break;
                     case 2:
                         //选择照片,对图片大小有要求，目前只能用KB大小的图片
@@ -141,6 +161,9 @@ public class AddActivity extends AppCompatActivity {
                 intent.putExtra("days",days);
                 intent.putExtra("hours",hours);
                 intent.putExtra("minutes",minutes);
+                intent.putExtra("period",period);
+
+
                 if(editTextTitle.getText().length() == 0){
                     Toast.makeText(getApplicationContext(), "标题不能为空", Toast.LENGTH_SHORT).show();
                 }
@@ -167,12 +190,44 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
+    private void PeriodDialog() {
+        final String[] items = { "每周","每月","每年","无" };
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(AddActivity.this);
+        listDialog.setTitle("周期");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int n = 3;
+               if(which == 0){
+                   period=7;
+                   n = 0;
+               }
+               else if(which ==1){
+                   period = 30;
+                   n = 1;
+               }
+               else if(which == 2){
+                   period = 365;
+                   n = 2;
+               }
+               else{
+                   period = 0;
+                   n = 3;
+               }
+               ArrayAddSetting.remove(1);
+               ArrayAddSetting.add(1,new AddSetting(R.drawable.repeat,"重复设置",items[n]));
+               Adapter1.notifyDataSetChanged();
+            }
+        });
+        listDialog.show();
+    }
     public void setDate(int position) {
         //选择日期
         final Calendar calendar = Calendar.getInstance();
         //当前位置的item
         final AddSetting addSetting= ArrayAddSetting.get(position);
-        DatePickerDialog dialog = new DatePickerDialog(AddActivity.this,
+        DatePickerDialog dialog = new DatePickerDialog(AddActivity.this, R.style.MyPickerDialogTheme,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -196,7 +251,7 @@ public class AddActivity extends AppCompatActivity {
     }
     public void setTime(int position) {
         final AddSetting addSetting= ArrayAddSetting.get(position);
-        new TimePickerDialog(this,new TimePickerDialog.OnTimeSetListener() {
+        new TimePickerDialog(this, R.style.MyPickerDialogTheme,new TimePickerDialog.OnTimeSetListener() {
 
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

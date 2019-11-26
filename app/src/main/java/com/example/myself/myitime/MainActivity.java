@@ -11,6 +11,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("days",0);
                 intent.putExtra("hours",0);
                 intent.putExtra("minutes",0);
+                intent.putExtra("period",0);
 
                 startActivityForResult(intent, REQUEST_CODE_ADD);
             }
@@ -102,9 +104,7 @@ public class MainActivity extends AppCompatActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),
-                        "你选择了第"+position+"个Item",
-                        Toast.LENGTH_SHORT).show();
+
 
                 changed_position=position;
                 it =theItems.get(position);
@@ -117,11 +117,15 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("days",it.getDays());
                 intent.putExtra("hours",it.getHours());
                 intent.putExtra("minutes",it.getMinutes());
+                intent.putExtra("period",it.getPeriod());
 
                 startActivityForResult(intent, REQUEST_CODE_DETAIL);
             }
 
         });
+        if(theItems.size() != 0){
+            showTimes();
+        }
 
 
 
@@ -140,7 +144,7 @@ public class MainActivity extends AppCompatActivity
     public void showTimes() {
 
         int runTime = 10*365*24*60*60;
-        CountDownTimer showTime = new CountDownTimer(runTime * 3600000, 1000) {
+        CountDownTimer showTime = new CountDownTimer(runTime,1000) {
             @Override
             public void onTick(long l) {
                 //倒计时时，在没有完成倒计时时会多次调用，直到结束倒计时
@@ -153,16 +157,13 @@ public class MainActivity extends AppCompatActivity
                     int month = curDate.get(Calendar.MONTH)+1;
                     int day = curDate.get(Calendar.DAY_OF_MONTH);
 
-
                     int years = item.getYears();
                     int months = item.getMonths();
                     int days = item.getDays();
 
-
                     int year_left = years-year;
                     int month_left = months-month+1;
                     int day_left = days-day;
-
 
                     if(month_left < 0&&year_left>0){
                         year_left--;
@@ -171,10 +172,15 @@ public class MainActivity extends AppCompatActivity
                     if(day_left < 0&&month_left>0){
                         month_left--;
                         day_left+=29;
-
                     }
-
-                    String time= String.valueOf("剩余"+(year_left*12*30+month_left*30+day_left)+"天");
+                    int left_time = year_left*12*30+month_left*30+day_left;
+                    String time = null;
+                    if(left_time >=0) {
+                        time = String.valueOf("剩余" + left_time + "天");
+                    }
+                    else{
+                        time = String.valueOf("已经"+(0-left_time)+"天");
+                    }
                     item.setLeftTime(time);
                     listviewAdapter.notifyDataSetChanged();
                 }
@@ -263,7 +269,7 @@ public class MainActivity extends AppCompatActivity
             remark.setText(good_item.getRemark());
             date.setText(date_text);
             leftTime.setText(good_item.getLeftTime());
-            showTimes();
+
             return item;
         }
     }
@@ -291,7 +297,8 @@ public class MainActivity extends AppCompatActivity
                int day = data.getIntExtra("days",0);
                int hour = data.getIntExtra("hours",0);
                int minute = data.getIntExtra("minutes",0);
-               Item item =new Item(title, remark, res,year,month,day,hour,minute);
+               int period = data.getIntExtra("period",0);
+               Item item =new Item(title, remark, res,year,month,day,hour,minute,period);
 
                theItems.add(item);
 
@@ -311,6 +318,7 @@ public class MainActivity extends AppCompatActivity
                     int day = data.getIntExtra("days",0);
                     int hour = data.getIntExtra("hours",0);
                     int minute = data.getIntExtra("minutes",0);
+                    int period = data.getIntExtra("period",0);
 
                     String date= String.valueOf(year+"年"+month+"月"+day+"日");
                     it=theItems.get(changed_position);
@@ -323,6 +331,7 @@ public class MainActivity extends AppCompatActivity
                     it.setDays(day);
                     it.setHours(hour);
                     it.setMinutes(minute);
+                    it.setPeriod(period);
                     listviewAdapter.notifyDataSetChanged();
                 }
                 else{

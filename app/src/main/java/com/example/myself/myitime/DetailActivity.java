@@ -8,6 +8,7 @@ import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,24 +22,28 @@ public class DetailActivity extends AppCompatActivity {
     Intent intent_DetailToMain=intent_DetailToMain = new Intent();;
 
     byte[] picture;
+    private int years,months,days,hours,minutes,period;
+    private String title = null,remark = null;
+    private byte[] pic = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        final int years = getIntent().getIntExtra("years",0);
-        final int months = getIntent().getIntExtra("months",0);
-        final int days = getIntent().getIntExtra("days",0);
-        final int hours = getIntent().getIntExtra("hours",0);
-        final int minutes = getIntent().getIntExtra("minutes",0);
-        final String title=getIntent().getStringExtra("title");
-        final String remark=getIntent().getStringExtra("remark");
-        byte[] pic=getIntent().getByteArrayExtra("picture");
+        years = getIntent().getIntExtra("years",0);
+        months = getIntent().getIntExtra("months",0);
+        days = getIntent().getIntExtra("days",0);
+        hours = getIntent().getIntExtra("hours",0);
+        minutes = getIntent().getIntExtra("minutes",0);
+        title=getIntent().getStringExtra("title");
+        remark=getIntent().getStringExtra("remark");
+        pic=getIntent().getByteArrayExtra("picture");
+        period = getIntent().getIntExtra("period",0);
 
         picture=pic;
 
-        String date= String.valueOf(years+"年"+(months+1)+"月"+days+"日"+hours+"时"+minutes+"分");
+        String date= String.valueOf(years+"年"+(months+1)+"月"+days+"日");
         intent_DetailToMain.putExtra("state","notChanged");
         Bitmap bitmap = Bytes2Bimap(pic);
         ImageView imageView = (ImageView)findViewById(R.id.image_view_detail);
@@ -107,6 +112,7 @@ public class DetailActivity extends AppCompatActivity {
                 intent.putExtra("days",days);
                 intent.putExtra("hours",hours);
                 intent.putExtra("minutes",minutes);
+                intent.putExtra("period",period);
 
                 startActivityForResult(intent, REQUEST_CODE_EDIT);
 
@@ -132,15 +138,17 @@ public class DetailActivity extends AppCompatActivity {
                 int minute = curDate.get(Calendar.MINUTE);
                 int second = curDate.get(Calendar.SECOND);
 
-                int years = getIntent().getIntExtra("years",0);
-                int months = getIntent().getIntExtra("months",0);
-                int days = getIntent().getIntExtra("days",0);
-                int hours = getIntent().getIntExtra("hours",0);
-                int minutes = getIntent().getIntExtra("minutes",0);
+                years = getIntent().getIntExtra("years",0);
+                months = getIntent().getIntExtra("months",0);
+                days = getIntent().getIntExtra("days",0);
+                hours = getIntent().getIntExtra("hours",0);
+                minutes = getIntent().getIntExtra("minutes",0);
+
 
                 int seconds=60;
 
                 TextView textView_leftTime = (TextView)findViewById(R.id.text_view_detail_leftTime);
+
 
                 int year_left = years-year;
                 int month_left = months-month+1;
@@ -148,37 +156,43 @@ public class DetailActivity extends AppCompatActivity {
                 int hour_left=hours-hour;
                 int minute_left = minutes-minute;
                 int second_left = seconds-second;
+                String time = null;
 
-                if(month_left < 0&&year_left>0){
-                    year_left--;
-                    month_left+=11;
+                if(year_left>0 || month_left>0 || day_left>0 || hour_left>0 || minute_left >=0) {
+                    if (month_left < 0 && year_left > 0) {
+                        year_left--;
+                        month_left += 11;
+                    }
+                    if (day_left < 0 && month_left > 0) {
+                        month_left--;
+                        day_left += 29;
+
+                    }
+                    if (hour_left < 0 && day_left > 0) {
+                        day_left--;
+                        hour_left += 23;
+
+                    }
+                    if (minute_left < 0 && hour_left > 0) {
+                        hour_left--;
+                        minute_left += 59;
+
+                    }
+                    if (second_left < 0 && minute_left > 0) {
+                        minute_left--;
+                        second_left += 59;
+                    }
+                    time = String.valueOf("剩余" + year_left + "年" + month_left + "月" + day_left + "日" + hour_left + "时" + minute_left + "分" + second_left + "秒");
                 }
-                if(day_left < 0&&month_left>0){
-                    month_left--;
-                    day_left+=29;
-
+                else{
+                    year_left = 0-year_left;
+                    month_left = 0-month_left;
+                    day_left = 0-day_left;
+                    hour_left = 0-hour_left;
+                    minute_left = 0-minute_left;
+                    second_left = 60-second_left;
+                    time = String.valueOf("已经" + year_left + "年" + month_left + "月" + day_left + "日" + hour_left + "时" + minute_left + "分" + second_left + "秒");
                 }
-                if(hour_left < 0&&day_left>0){
-                    day_left--;
-                    hour_left+=23;
-
-                }
-                if(minute_left < 0&&hour_left>0){
-                    hour_left--;
-                    minute_left+=59;
-
-                }
-                if(second_left < 0&&minute_left>0){
-                    minute_left--;
-                    second_left+=59;
-                }
-
-
-
-
-
-
-                String time= String.valueOf("剩余"+year_left+"年"+month_left+"月"+day_left+"日"+hour_left+"时"+minute_left+"分"+second_left+"秒");
 
                 textView_leftTime.setText(time);
             }
@@ -200,15 +214,15 @@ public class DetailActivity extends AppCompatActivity {
                 intent_DetailToMain.putExtra("state","notChanged");
             }
             else if(resultCode==RESULT_OK){
-                String title=data.getStringExtra("title");
-                String remark=data.getStringExtra("remark");
-                byte[] pic=data.getByteArrayExtra("picture");
-                int years = getIntent().getIntExtra("years",0);
-                int months = getIntent().getIntExtra("months",0);
-                int days = getIntent().getIntExtra("days",0);
-                int hours = getIntent().getIntExtra("hours",0);
-                int minutes = getIntent().getIntExtra("minutes",0);
-
+                title=data.getStringExtra("title");
+                remark=data.getStringExtra("remark");
+                pic=data.getByteArrayExtra("picture");
+                years = data.getIntExtra("years",0);
+                months = data.getIntExtra("months",0);
+                days = data.getIntExtra("days",0);
+                hours = data.getIntExtra("hours",0);
+                minutes = data.getIntExtra("minutes",0);
+                period = data.getIntExtra("period",0);
 
                 intent_DetailToMain.putExtra("title",title);
                 intent_DetailToMain.putExtra("remark",remark);
@@ -219,6 +233,7 @@ public class DetailActivity extends AppCompatActivity {
                 intent_DetailToMain.putExtra("days",days);
                 intent_DetailToMain.putExtra("hours",hours);
                 intent_DetailToMain.putExtra("minutes",minutes);
+                intent_DetailToMain.putExtra("period",period);
             }
         }
 

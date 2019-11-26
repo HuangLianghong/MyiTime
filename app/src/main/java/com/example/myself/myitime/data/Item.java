@@ -17,6 +17,7 @@ public class Item implements Serializable {
     private int days;
     private int hours;
     private int minutes;
+    private int period;
 
     public int getHours() {
         return hours;
@@ -66,7 +67,15 @@ public class Item implements Serializable {
         this.days = days;
     }
 
-    public Item(String title, String remark, byte[] pic, int years, int months, int days,int hours,int minutes) {
+    public int getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
+    }
+
+    public Item(String title, String remark, byte[] pic, int years, int months, int days, int hours, int minutes,int period) {
         this.title = title;
         this.remark = remark;
         this.pic = pic;
@@ -75,6 +84,7 @@ public class Item implements Serializable {
         this.days = days;
         this.hours = hours;
         this.minutes=minutes;
+        this.period=period;
     }
 
     public String getTitle() {
