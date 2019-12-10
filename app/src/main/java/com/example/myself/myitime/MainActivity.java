@@ -175,7 +175,14 @@ public class MainActivity extends AppCompatActivity
                     }
                     int left_time = year_left*12*30+month_left*30+day_left;
                     String time = null;
+                    Log.d("time_Check", "onTick: "+left_time);
                     if(left_time >=0) {
+                        time = String.valueOf("剩余" + left_time + "天");
+                    }
+                    else if(item.getPeriod() != 0){
+                        while(left_time < 0){
+                            left_time += item.getPeriod();
+                        }
                         time = String.valueOf("剩余" + left_time + "天");
                     }
                     else{
