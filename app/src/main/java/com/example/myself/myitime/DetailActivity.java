@@ -1,18 +1,22 @@
 package com.example.myself.myitime;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DetailActivity extends AppCompatActivity {
@@ -25,12 +29,18 @@ public class DetailActivity extends AppCompatActivity {
     private int years,months,days,hours,minutes,period;
     private String title = null,remark = null;
     private byte[] pic = null;
+    private ArrayList<Integer> RGB = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_detail);
 
+        RGB = MainActivity.RGB;
+        if(!RGB.isEmpty()) {
+            getWindow().setStatusBarColor(Color.rgb(RGB.get(0),RGB.get(1),RGB.get(2)));
+        }
         years = getIntent().getIntExtra("years",0);
         months = getIntent().getIntExtra("months",0);
         days = getIntent().getIntExtra("days",0);

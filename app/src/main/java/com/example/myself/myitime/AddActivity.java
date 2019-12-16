@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.LayoutRes;
@@ -21,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -53,10 +55,12 @@ public class AddActivity extends AppCompatActivity {
     public byte[] pic;
     public String date;
     private int years,months,days,hours,minutes,period;
+    private ArrayList<Integer> RGB = MainActivity.RGB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_event);
 
 
@@ -76,6 +80,11 @@ public class AddActivity extends AppCompatActivity {
 
         String type=getIntent().getStringExtra("type");
 
+        ImageView imageView = (ImageView)findViewById(R.id.image_view_add_title_background);
+        if(!RGB.isEmpty()) {
+            getWindow().setStatusBarColor(Color.rgb(RGB.get(0),RGB.get(1),RGB.get(2)));
+            imageView.setColorFilter(Color.rgb(RGB.get(0), RGB.get(1), RGB.get(2)));
+        }
         Calendar curDate = Calendar.getInstance();
         int year = curDate.get(Calendar.YEAR);
         int month = curDate.get(Calendar.MONTH)+1;

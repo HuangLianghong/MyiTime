@@ -2,6 +2,8 @@ package com.example.myself.myitime.data;
 
 import android.content.Context;
 
+import com.example.myself.myitime.MainActivity;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,8 +23,12 @@ public class FileDataSource {
     public ArrayList<Item> getItems() {
         return items;
     }
-
+    private ArrayList<Integer> RGB = MainActivity.RGB;
     private ArrayList<Item> items=new ArrayList<Item>();
+
+    public ArrayList<Integer> getRGB() {
+        return RGB;
+    }
 
     public void save()
     {
@@ -32,11 +38,13 @@ public class FileDataSource {
             );
             outputStream.writeObject(items);
             outputStream.close();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public ArrayList<Item> load()
+    public ArrayList<Item> loadItems()
     {
         try{
             ObjectInputStream inputStream = new ObjectInputStream(
@@ -49,4 +57,6 @@ public class FileDataSource {
         }
         return items;
     }
+
+
 }

@@ -1,10 +1,12 @@
 package com.example.myself.myitime;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.LayoutRes;
@@ -36,7 +38,6 @@ import com.example.myself.myitime.data.Item;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -45,10 +46,12 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_CODE_ADD = 1;
     private static final int REQUEST_CODE_DETAIL=2;
     private static final int RESULT_DELETE=901;
+    private static final int COLOR_PICK_REQUEST=333;
 
     private ArrayList<Item> theItems;
     private FileDataSource fileDataSource;
     private EventsArrayAdapter listviewAdapter = null;
+    public static ArrayList<Integer> RGB = new ArrayList<Integer>();
 
     Item it;
     int changed_position=0;
@@ -61,8 +64,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        InitData();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +99,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       InitData();
+
 
         //set adapter for ListView
         listviewAdapter = new EventsArrayAdapter(this, R.layout.event, theItems);
@@ -134,7 +140,9 @@ public class MainActivity extends AppCompatActivity
 
     private void InitData() {
         fileDataSource=new FileDataSource(this);
-        theItems=fileDataSource.load();
+        theItems=fileDataSource.loadItems();
+
+
     }
     @Override
     protected void onDestroy() {
@@ -224,10 +232,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-/*
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+
+        if (id == R.id.nav_color) {
+            Intent intent = new Intent(this, ColorPickActivity.class);
+            intent.putExtra("RGB",RGB);
+            startActivityForResult(intent,COLOR_PICK_REQUEST);
+        }
+        /*else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -290,6 +301,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
+    @SuppressLint("NewApi")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==REQUEST_CODE_ADD){
@@ -352,9 +364,35 @@ public class MainActivity extends AppCompatActivity
                 listviewAdapter.notifyDataSetChanged();
                 Toast.makeText(MainActivity.this, "删除成功！", Toast.LENGTH_SHORT).show();
             }
-            else{}
 
+
+            else{}
         }
+        else if(requestCode == COLOR_PICK_REQUEST){
+            if(resultCode ==RESULT_OK){
+                RGB = data.getIntegerArrayListExtra("RGB");
+                Toast.makeText(MainActivity.this, "R：" + RGB.get(0) + "\nG：" + RGB.get(1) + "\nB：" + RGB.get(2) + "\n", Toast.LENGTH_SHORT).show();
+                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add);
+                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+                toolbar.setBackgroundColor(Color.rgb(RGB.get(0),RGB.get(1),RGB.get(2)));
+
+
+                int[][] states = new int[2][];
+                states[0] = new int[]{android.R.attr.state_pressed};
+                states[1] = new int[]{android.R.attr.state_enabled};
+                int[] colors;
+                colors = new int[]{0x00e43d2b, Color.rgb(RGB.get(0),RGB.get(1),RGB.get(2))};
+
+                getWindow().setStatusBarColor(Color.rgb(RGB.get(0),RGB.get(1),RGB.get(2)));
+
+                fab.setBackgroundTintList(new ColorStateList(states, colors));
+            }
+            else{
+
+            }
+        }
+
     }
 
 
